@@ -1,102 +1,353 @@
 package com.example.nfc_gatway.screen.MainScreen
 
-import androidx.compose.material3.Text
-import androidx.compose.ui.text.font.FontWeight
-
+import android.widget.Toast
 import androidx.compose.foundation.Image
-import com.example.nfc_gatway.R
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.nfc_gatway.R
 
 @Composable
 @Preview
 fun HomeScreen() {
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color(0xFF014BD4))
     ) {
-        // Top Section
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF26283B))
-                .padding(16.dp)
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = painterResource(id = R.drawable.nfc_logo), // your image
-                    contentDescription = "Profile Image",
+        Column {
+            // Top Section with Curve
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(190.dp)
+                    .background(Color(0xFF014BD4))
+            ) {
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Spacer(modifier = Modifier.height(40.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 40.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(100.dp)
+                                .clip(CircleShape)
+                                .background(Color.Gray)
+                        ) {
+                            // Placeholder for Profile Image
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Column(
+                            modifier = Modifier.padding(start = 20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                "Hi, Your Name",
+                                color = Color.White,
+                                fontSize = 25.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text("Role in company", color = Color.White, fontSize = 18.sp)
+                            Text("Empid, office email", color = Color.White, fontSize = 14.sp)
+                        }
+                    }
+                }
+            }
+
+            Surface(
+                shape = RoundedCornerShape(
+                    topStart = 35.dp,
+                    topEnd = 35.dp
+                ), // Curved top corners
+                color = Color.White,
+                modifier = Modifier
+                    .fillMaxHeight()
+
+            ) {
+                Column(
                     modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape)
-                        .border(2.dp, Color.White, CircleShape)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text("Mary Smith", color = Color.White, fontSize = 20.sp)
-                Text("SMS  415-555-1232", color = Color.White, fontSize = 14.sp)
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
+                        .fillMaxWidth()
+                        .padding(12.dp), // Inner padding
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("2", color = Color.White, fontSize = 18.sp)
-                        Text("Unclaimed", color = Color.White, fontSize = 12.sp)
-                    }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("$2,880", color = Color.White, fontSize = 18.sp)
-                        Text("Monthly Earn", color = Color.White, fontSize = 12.sp)
-                    }
-                }
-            }
-        }
-    }
+                    // Drag Handle (Gray Bar)
+                    Box(
+                        modifier = Modifier
+                            .width(100.dp)
+                            .height(5.dp)
+                            .background(Color.Gray, shape = RoundedCornerShape(2.dp))
+                    )
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF161928))
-                .padding(16.dp)
-        ){
-            Column {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text("Mary Smith", color = Color.White, fontSize = 20.sp)
-                Text("SMS  415-555-1232", color = Color.White, fontSize = 14.sp)
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("2", color = Color.White, fontSize = 18.sp)
-                        Text("Unclaimed", color = Color.White, fontSize = 12.sp)
+                    Spacer(modifier = Modifier.height(17.dp))
+
+                    // Info Text
+                    Text(
+                        text = "Effortlessly manage attendance and workplace activities with NFC technology. " +
+                                "Employees can check in/out with a simple tap, access real-time schedules, " +
+                                "collaborate on projects, and stay connected—all in one seamless system.",
+                        fontSize = 13.sp,
+                        color = Color.Black,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 25.dp) // Left & Right spacing
+                    )
+                    Spacer(modifier = Modifier.height(40.dp))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        val context = LocalContext.current
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(2),
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            item {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.clickable {
+                                        Toast.makeText(
+                                            context,
+                                            "Attendance Clicked",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(107.dp)
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .background(Color(0xFF014BD4)), // Purple
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.nfctools),
+                                            contentDescription = "Attendance",
+                                            modifier = Modifier.size(60.dp),
+                                            colorFilter = ColorFilter.tint(Color.White)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(text = "Attendance", fontSize = 14.sp, color = Color.Black)
+                                }
+                            }
+
+                            item {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.clickable {
+                                        Toast.makeText(
+                                            context,
+                                            "Meeting Clicked",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(107.dp)
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .background(Color(0xFF014BD4)), // Purple
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.meeting),
+                                            contentDescription = "Meeting",
+                                            modifier = Modifier.size(60.dp),
+                                            colorFilter = ColorFilter.tint(Color.White)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(text = "Meeting", fontSize = 14.sp, color = Color.Black)
+                                }
+                            }
+
+                            item {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.clickable {
+                                        Toast.makeText(
+                                            context,
+                                            "Holiday-Apply Clicked",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(107.dp)
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .background(Color(0xFF014BD4)), // Purple
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.holiday),
+                                            contentDescription = "Holiday Apply",
+                                            modifier = Modifier.size(60.dp),
+                                            colorFilter = ColorFilter.tint(Color.White)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        text = "Holiday-Apply",
+                                        fontSize = 14.sp,
+                                        color = Color.Black
+                                    )
+                                }
+                            }
+
+                            item {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.clickable {
+                                        Toast.makeText(
+                                            context,
+                                            "Vending Machine Clicked",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(107.dp)
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .background(Color(0xFF014BD4)), // Purple
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.vending_machine),
+                                            contentDescription = "Vending Machine",
+                                            modifier = Modifier.size(60.dp),
+                                            colorFilter = ColorFilter.tint(Color.White)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        text = "Vending Machine",
+                                        fontSize = 14.sp,
+                                        color = Color.Black
+                                    )
+                                }
+                            }
+                        }
                     }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("$2,880", color = Color.White, fontSize = 18.sp)
-                        Text("Monthly Earn", color = Color.White, fontSize = 12.sp)
+                    Spacer(modifier = Modifier.height(17.dp))
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.BottomCenter
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Bottom
+                        ) {
+                            // Logout Button
+                            Button(
+                                onClick = { /* Handle logout */ },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(
+                                        0xFF014BD4
+                                    )
+                                ),
+                                shape = RoundedCornerShape(50),
+                                modifier = Modifier
+                                    .fillMaxWidth(0.6f)
+                                    .height(45.dp)
+                            ) {
+                                Text(text = "Logout", color = Color.White, fontSize = 16.sp)
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            // Divider Line
+                            Divider(color = Color.Gray, thickness = 2.dp)
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            // Bottom Navigation Bar
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 40.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.home),
+                                    contentDescription = "Home",
+                                    tint = Color.Black,
+                                    modifier = Modifier
+                                        .size(33.dp)
+                                        .clickable {}
+                                )
+
+                                Icon(
+                                    painter = painterResource(id = R.drawable.chat),
+                                    contentDescription = "Chat",
+                                    tint = Color(0xFF014BD4),
+                                    modifier = Modifier
+                                        .size(35.dp)
+                                        .clickable {}
+                                )
+
+                                Icon(
+                                    painter = painterResource(id = R.drawable.notification),
+                                    contentDescription = "Notifications",
+                                    tint = Color.Black,
+                                    modifier = Modifier
+                                        .size(33.dp)
+                                        .clickable {}
+                                )
+                            }
+                        }
                     }
+                }
+
                 }
             }
         }
-    }
+
 }
+
 
