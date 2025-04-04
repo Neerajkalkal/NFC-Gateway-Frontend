@@ -14,11 +14,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,19 +28,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nfc_gatway.R
+import com.example.nfc_gatway.viewmodels.HomeviewModel.HomeViewModel
+import androidx.compose.runtime.getValue
 
 @Composable
-@Preview
-fun HomeScreen() {
+fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: String) {
+    val employee by viewModel.employee
+val context = LocalContext.current
+    // Fetch employee data when screen loads
+    LaunchedEffect(email) {
+        viewModel.fetchEmployee(email,token)
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -71,24 +76,45 @@ fun HomeScreen() {
                                 .size(100.dp)
                                 .clip(CircleShape)
                                 .background(Color.Gray)
+                                .padding(start = 10.dp)
                         ) {
-                            // Placeholder for Profile Image
+//                            imageUri.value?.let {
+//                                Image(
+//                                    painter = rememberAsyncImagePainter(it),
+//                                    contentDescription = "Profile Image",
+//                                    modifier = Modifier.fillMaxSize(),
+//                                    contentScale = ContentScale.Crop
+//                                )
+//                            } ?: Icon(
+//                                imageVector = Icons.Default.CameraAlt,
+//                                contentDescription = "Upload Image",
+//                                tint = Color.White,
+//                                modifier = Modifier.size(30.dp)
+//                            )
+//                        }
                         }
                         Spacer(modifier = Modifier.height(8.dp))
-                        Column(
-                            modifier = Modifier.padding(start = 20.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                "Hi, Your Name",
-                                color = Color.White,
-                                fontSize = 25.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text("Role in company", color = Color.White, fontSize = 18.sp)
-                            Text("Empid, office email", color = Color.White, fontSize = 14.sp)
+
+                            Column(
+                                modifier = Modifier.padding(start = 20.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                employee?.let { emp ->
+                                Text(
+                                    "Hi,${emp.name}",
+                                    color = Color.White,
+                                    fontSize = 25.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text("${emp.department}", color = Color.White, fontSize = 16.sp)
+                                Text("${emp.employeeId},${emp.email}", color = Color.White, fontSize = 14.sp)
+                            } ?:run{
+                                        CircularProgressIndicator(color = Color.Black)
+                                    }
                         }
+
+
                     }
                 }
             }
@@ -349,5 +375,6 @@ fun HomeScreen() {
         }
 
 }
+
 
 

@@ -1,16 +1,21 @@
 package com.example.nfc_gatway.viewmodels.LoginScreenviewmodel
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import com.example.nfc_gatway.DataModels.LoginRequest
+import com.example.nfc_gatway.DataModels.loginResponse
 import com.example.nfc_gatway.Network.Retrofit.RetrofitInstance
+import com.example.nfc_gatway.datastore.TokenManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.json.JSONObject
+
 
 
 data class DataOrException<T, E : Exception>(
@@ -19,16 +24,19 @@ data class DataOrException<T, E : Exception>(
     var e: E? = null
 )
 
-class EmployeeLoginViewModel : ViewModel() {
 
-    // Input fields
+class EmployeeLoginViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val context = application.applicationContext
+
+    // Input states
     var email = MutableStateFlow("")
         private set
 
     var password = MutableStateFlow("")
         private set
 
-    // Unified login response state
+    // Login response state
     private val _loginResponse = MutableStateFlow(DataOrException<String, Exception>())
     val loginResponse = _loginResponse.asStateFlow()
 
@@ -40,35 +48,36 @@ class EmployeeLoginViewModel : ViewModel() {
         password.value = newPassword
     }
 
+
     fun login() {
         viewModelScope.launch {
             _loginResponse.value = DataOrException(loading = true)
             try {
-                val response = RetrofitInstance.api.login(LoginRequest(email.value, password.value))
+                    val response = RetrofitInstance.api.login(LoginRequest(email.value, password.value))
+
+//                    val token = response.token  // assuming your loginResponse has a field `token`
+//                    TokenManager.saveToken(context, token)
+//
+//                    _loginResponse.value = DataOrException(data = token, loading = false)
                 if (response.isSuccessful) {
-                    val rawBody = response.body()?.string()
-                    rawBody?.let { body ->
-                        if (body.startsWith("{")) {
-                            // Handle JSON response
-                            val jsonObject = JSONObject(body)
-                            val token = jsonObject.optString("token", "")
-                            val message = jsonObject.optString("message", "")
+                    val rawBody = response.body()
 
-                            // You can choose what to expose (token, message, both)
-                            _loginResponse.value = DataOrException(data = token.ifEmpty { message }, loading = false)
+                    if (!rawBody.isNullOrEmpty()) {
+                        // Save the token assuming the response is a plain string
+                        TokenManager.saveToken(context, rawBody)
 
-                        } else {
-                            // Handle plain string response
-                            _loginResponse.value = DataOrException(data = body, loading = false)
-                        }
-                    } ?: run {
+                        // Pass token to the UI
+                        _loginResponse.value = DataOrException(data = rawBody, loading = false)
+                    } else {
                         _loginResponse.value = DataOrException(
-                            e = Exception("Empty response body"), loading = false
+                            e = Exception("Invalid response"),
+                            loading = false
                         )
                     }
                 } else {
+                    val errorMsg = "Login failed: ${response.code()} ${response.message()}"
                     _loginResponse.value = DataOrException(
-                        e = Exception("Login failed: ${response.message()}"),
+                        e = Exception(errorMsg),
                         loading = false
                     )
                 }
