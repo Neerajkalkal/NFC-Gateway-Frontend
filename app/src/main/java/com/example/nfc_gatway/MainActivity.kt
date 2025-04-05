@@ -12,11 +12,13 @@ import com.example.nfc_gatway.Navcontroller.AppNavHost
 import com.example.nfc_gatway.screen.LoginScreen.EmployeeLoginScreen
 import com.example.nfc_gatway.ui.theme.NfcGatwayTheme
 import com.example.nfc_gatway.viewmodels.LoginScreenviewmodel.EmployeeLoginViewModel
+import com.google.firebase.FirebaseApp
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
         enableEdgeToEdge()
         setContent {
             NfcGatwayTheme {

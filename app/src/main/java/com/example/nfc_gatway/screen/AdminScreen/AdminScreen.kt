@@ -1,4 +1,4 @@
-package com.example.nfc_gatway.screen.MainScreen
+package com.example.nfc_gatway.screen.AdminScreen
 
 import android.content.Context
 import android.net.Uri
@@ -48,7 +48,7 @@ import com.example.nfc_gatway.viewmodels.ProfileViewModel.ProfileViewModel
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: String ) {
     val employee by viewModel.employee
-val context = LocalContext.current
+    val context = LocalContext.current
     // Fetch employee data when screen loads
     LaunchedEffect(email) {
         viewModel.fetchEmployee(email,token)
@@ -111,12 +111,12 @@ val context = LocalContext.current
 //                        }
                         Spacer(modifier = Modifier.height(8.dp))
 
-                            Column(
-                                modifier = Modifier.padding(start = 20.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                employee?.let { emp ->
+                        Column(
+                            modifier = Modifier.padding(start = 20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            employee?.let { emp ->
                                 Text(
                                     "Hi,${emp.name}",
                                     color = Color.White,
@@ -126,8 +126,8 @@ val context = LocalContext.current
                                 Text("${emp.department}", color = Color.White, fontSize = 16.sp)
                                 Text("${emp.employeeId},${emp.email}", color = Color.White, fontSize = 14.sp)
                             } ?:run{
-                                        CircularProgressIndicator(color = Color.Black)
-                                    }
+                                CircularProgressIndicator(color = Color.Black)
+                            }
                         }
 
 
@@ -386,9 +386,9 @@ val context = LocalContext.current
                     }
                 }
 
-                }
             }
         }
+    }
 
 }
 

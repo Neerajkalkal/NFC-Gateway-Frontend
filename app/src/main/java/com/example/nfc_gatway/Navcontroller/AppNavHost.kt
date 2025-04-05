@@ -5,13 +5,17 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.nfc_gatway.screen.ChoiceScreen.MainScreen
 import com.example.nfc_gatway.screen.LoginScreen.EmployeeLoginScreen
 import com.example.nfc_gatway.screen.MainScreen.HomeScreen
 import com.example.nfc_gatway.viewmodels.LoginScreenviewmodel.EmployeeLoginViewModel
 
 @Composable
 fun AppNavHost(navController: NavHostController, viewModel: EmployeeLoginViewModel) {
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = "Main") {
+        composable("Main") {
+            MainScreen(navController)
+        }
         composable("login") {
             EmployeeLoginScreen(
                 navController = navController
