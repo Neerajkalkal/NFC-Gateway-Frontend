@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.Horizontal
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
@@ -344,7 +345,7 @@ val context = LocalContext.current
                             Spacer(modifier = Modifier.height(8.dp))
 
                             // Divider Line
-                            Divider(color = Color.Gray, thickness = 2.dp)
+                           Divider(color = Color.Gray, thickness = 2.dp)
 
                             Spacer(modifier = Modifier.height(8.dp))
 

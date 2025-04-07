@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.draw.clip
 import androidx.compose.material.*
 import androidx.compose.material3.Button
@@ -41,12 +43,13 @@ import com.example.nfc_gatway.viewmodels.HomeviewModel.HomeViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.navigation.NavController
 import com.example.nfc_gatway.viewmodels.ProfileViewModel.ProfileViewModel
 
 
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: String ) {
+fun AdminScreen(viewModel: HomeViewModel = viewModel(), email: String, token: String ,navController: NavController) {
     val employee by viewModel.employee
     val context = LocalContext.current
     // Fetch employee data when screen loads
@@ -148,7 +151,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: Str
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(12.dp), // Inner padding
+                        .padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     // Drag Handle (Gray Bar)
@@ -212,7 +215,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: Str
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(8.dp))
-                                    Text(text = "Attendance", fontSize = 14.sp, color = Color.Black)
+                                    Text(text = "Attendance",fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = Color.Black)
                                 }
                             }
 
@@ -231,7 +234,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: Str
                                         modifier = Modifier
                                             .size(107.dp)
                                             .clip(RoundedCornerShape(16.dp))
-                                            .background(Color(0xFF014BD4)), // Purple
+                                            .background(Color(0xFF014BD4)),
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Image(
@@ -242,38 +245,33 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: Str
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(8.dp))
-                                    Text(text = "Meeting", fontSize = 14.sp, color = Color.Black)
+                                    Text(text = "Meeting", fontWeight = FontWeight.SemiBold,fontSize = 14.sp, color = Color.Black)
                                 }
                             }
 
                             item {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier.clickable {
-                                        Toast.makeText(
-                                            context,
-                                            "Holiday-Apply Clicked",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
+                                    modifier = Modifier.clickable {  navController.navigate("creteemployee")}
                                 ) {
                                     Box(
                                         modifier = Modifier
                                             .size(107.dp)
                                             .clip(RoundedCornerShape(16.dp))
-                                            .background(Color(0xFF014BD4)), // Purple
+                                            .background(Color(0xFF014BD4)),
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Image(
-                                            painter = painterResource(id = R.drawable.holiday),
-                                            contentDescription = "Holiday Apply",
+                                            painter = painterResource(id = R.drawable.create_employee),
+                                            contentDescription = "create employee",
                                             modifier = Modifier.size(60.dp),
                                             colorFilter = ColorFilter.tint(Color.White)
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        text = "Holiday-Apply",
+                                        text = "Create Employee",
+                                        fontWeight = FontWeight.SemiBold,
                                         fontSize = 14.sp,
                                         color = Color.Black
                                     )
@@ -309,10 +307,13 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: Str
                                     Text(
                                         text = "Vending Machine",
                                         fontSize = 14.sp,
+                                        fontWeight = FontWeight.SemiBold,
                                         color = Color.Black
                                     )
                                 }
                             }
+
+
                         }
                     }
                     Spacer(modifier = Modifier.height(17.dp))
@@ -338,7 +339,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: Str
                                     .fillMaxWidth(0.6f)
                                     .height(45.dp)
                             ) {
-                                Text(text = "Logout", color = Color.White, fontSize = 16.sp)
+                                Text(text = "Logout", fontWeight = FontWeight.SemiBold,color = Color.White, fontSize = 16.sp)
                             }
 
                             Spacer(modifier = Modifier.height(8.dp))

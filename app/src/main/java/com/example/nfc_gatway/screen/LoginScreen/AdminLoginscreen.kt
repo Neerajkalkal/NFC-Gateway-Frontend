@@ -24,9 +24,8 @@ import com.example.nfc_gatway.R
 import androidx.compose.material3.OutlinedTextField
 import com.example.nfc_gatway.viewmodels.LoginScreenviewmodel.EmployeeLoginViewModel
 
-
 @Composable
-fun EmployeeLoginScreen(
+fun AdminLoginScreen(
     viewModel: EmployeeLoginViewModel = viewModel(),
     navController: NavHostController
 ) {
@@ -130,8 +129,8 @@ fun EmployeeLoginScreen(
         loginState.data?.let { token ->
             val email = viewModel.email.value // Get email from ViewModel
             LaunchedEffect(token) {
-                Toast.makeText(context, "Login Successful!", Toast.LENGTH_SHORT).show()
-                navController.navigate("home/$email/$token") { // Pass email & token
+//                Toast.makeText(context, "Login Successful!", Toast.LENGTH_SHORT).show()
+                navController.navigate("admin/$email/$token") { // Pass email & token
                     popUpTo("login") { inclusive = true }
                 }
             }

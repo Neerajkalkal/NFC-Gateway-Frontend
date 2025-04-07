@@ -1,10 +1,8 @@
 package com.example.nfc_gatway.Network.ApiService
 
+import com.example.nfc_gatway.DataModels.EmployeeRequest
 import com.example.nfc_gatway.DataModels.LoginRequest
-import com.example.nfc_gatway.DataModels.loginResponse
-import com.example.nfc_gatway.datastore.Employee
-import com.example.nfc_gatway.datastore.TokenManager
-import okhttp3.ResponseBody
+import com.example.nfc_gatway.DataModels.Employee
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,4 +21,10 @@ interface ApiService {
         @Path("email") email: String,
         @Header("Authorization") token: String
     ): Employee
+
+    @POST("/api/admin/create_employee")
+    suspend fun createEmployee(
+        @Header("Authorization") token: String,
+        @Body employee: EmployeeRequest
+    ): Response<Void>
 }

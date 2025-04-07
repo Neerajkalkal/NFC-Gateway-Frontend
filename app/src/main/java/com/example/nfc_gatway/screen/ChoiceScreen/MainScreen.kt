@@ -104,7 +104,7 @@ fun MainScreen(navController: NavController){
                             imageRes = R.drawable.admin,
                             title = "Admin",
                             onClick = {
-                                navController.navigate("login")
+                                navController.navigate("adminlogin")
                             }
                         )
 
@@ -115,7 +115,7 @@ fun MainScreen(navController: NavController){
                             imageRes = R.drawable.employee,
                             title = "Employee",
                             onClick = {
-                                navController.navigate("login")
+                                navController.navigate("employeelogin")
                             }
                         )
                     }

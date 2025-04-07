@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nfc_gatway.Network.Retrofit.RetrofitInstance
-import com.example.nfc_gatway.datastore.Employee
+import com.example.nfc_gatway.DataModels.Employee
 import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
