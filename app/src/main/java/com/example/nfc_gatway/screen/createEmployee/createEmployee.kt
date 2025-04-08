@@ -2,6 +2,7 @@ package com.example.nfc_gatway.screen.createEmployee
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -65,6 +67,7 @@ fun CreateEmployeeScreen(
             .fillMaxSize()
             .background(Color(0xFF014BD4))
     ) {
+
         Column {
             // Top Section with Curve
             Box(
@@ -73,7 +76,11 @@ fun CreateEmployeeScreen(
                     .height(190.dp)
                     .background(Color(0xFF014BD4))
             ) {
-
+                Icon(
+                    Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White, modifier = Modifier.padding(10.dp).clickable{}
+                )
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -87,6 +94,7 @@ fun CreateEmployeeScreen(
                         verticalAlignment = Alignment.CenterVertically
 
                     ) {
+
                         Box(
                             modifier = Modifier
                                 .size(100.dp)

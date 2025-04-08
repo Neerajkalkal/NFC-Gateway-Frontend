@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,7 +46,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import com.example.nfc_gatway.viewmodels.ProfileViewModel.ProfileViewModel
-
+import java.net.URLEncoder
 
 
 @Composable
@@ -57,11 +58,6 @@ fun AdminScreen(viewModel: HomeViewModel = viewModel(), email: String, token: St
         viewModel.fetchEmployee(email,token)
     }
 
-//    val imageUri = remember { mutableStateOf<Uri?>(null) }
-//    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-//        imageUri.value = uri
-//        uri?.let { viewModel.uploadImageToFirebase(it, context) } // Upload to Firebase
-//    }
 
     Box(
         modifier = Modifier
@@ -90,28 +86,7 @@ fun AdminScreen(viewModel: HomeViewModel = viewModel(), email: String, token: St
                         verticalAlignment = Alignment.CenterVertically
 
                     ) {
-//                        Box(
-//                            modifier = Modifier
-//                                .size(100.dp)
-//                                .clip(CircleShape)
-//                                .background(Color.Gray)
-//                                .padding(start = 10.dp)
-//                        ) {
-//                            imageUri.value?.let {
-//                                Image(
-//                                    painter = rememberAsyncImagePainter(it),
-//                                    contentDescription = "Profile Image",
-//                                    modifier = Modifier.fillMaxSize(),
-//                                    contentScale = ContentScale.Crop
-//                                )
-//                            } ?: Icon(
-//                                imageVector = Icons.Default.CameraAlt,
-//                                contentDescription = "Upload Image",
-//                                tint = Color.White,
-//                                modifier = Modifier.size(30.dp)
-//                            )
-//                        }
-//                        }
+
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Column(
@@ -193,11 +168,7 @@ fun AdminScreen(viewModel: HomeViewModel = viewModel(), email: String, token: St
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier.clickable {
-                                        Toast.makeText(
-                                            context,
-                                            "Attendance Clicked",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        navController.navigate("nfc_popup/${URLEncoder.encode(token, "UTF-8")}/$")
                                     }
                                 ) {
                                     Box(
@@ -345,7 +316,7 @@ fun AdminScreen(viewModel: HomeViewModel = viewModel(), email: String, token: St
                             Spacer(modifier = Modifier.height(8.dp))
 
                             // Divider Line
-                            Divider(color = Color.Gray, thickness = 2.dp)
+                            HorizontalDivider( thickness = 2.dp, color = Color.Gray)
 
                             Spacer(modifier = Modifier.height(8.dp))
 

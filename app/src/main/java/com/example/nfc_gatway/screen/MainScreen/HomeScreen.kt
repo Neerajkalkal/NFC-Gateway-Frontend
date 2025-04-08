@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -42,12 +43,13 @@ import com.example.nfc_gatway.viewmodels.HomeviewModel.HomeViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.navigation.NavController
 import com.example.nfc_gatway.viewmodels.ProfileViewModel.ProfileViewModel
 
 
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: String ) {
+fun HomeScreen(viewModel: HomeViewModel = viewModel(), email: String, token: String ,navController: NavController) {
     val employee by viewModel.employee
 val context = LocalContext.current
     // Fetch employee data when screen loads
@@ -190,13 +192,7 @@ val context = LocalContext.current
                             item {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier.clickable {
-                                        Toast.makeText(
-                                            context,
-                                            "Attendance Clicked",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
+                                    modifier = Modifier.clickable {navController.navigate("nfc_popup")}
                                 ) {
                                     Box(
                                         modifier = Modifier
@@ -345,7 +341,7 @@ val context = LocalContext.current
                             Spacer(modifier = Modifier.height(8.dp))
 
                             // Divider Line
-                           Divider(color = Color.Gray, thickness = 2.dp)
+                            HorizontalDivider( thickness = 2.dp, color = Color.Gray)
 
                             Spacer(modifier = Modifier.height(8.dp))
 
