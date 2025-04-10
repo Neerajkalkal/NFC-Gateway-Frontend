@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1047765473663",
+    "project_id": "nfc-gateway-5e50e",
+    "storage_bucket": "nfc-gateway-5e50e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1047765473663:android:47e96e8dca29a2a3c2a24a",
+        "android_client_info": {
+          "package_name": "com.example.nfc_gatway"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANZJ6yqkbEAFTYoMplSSn5DB7dzZQuH00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

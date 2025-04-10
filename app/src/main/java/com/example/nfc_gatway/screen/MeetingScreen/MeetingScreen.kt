@@ -1,4 +1,4 @@
-package com.example.nfc_gatway.screen.createEmployee
+package com.example.nfc_gatway.screen.MeetingScreen
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -16,65 +16,57 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Cabin
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.nfc_gatway.R
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.nfc_gatway.datastore.TokenManager
-import com.example.nfc_gatway.viewmodels.CreateEmployeeViewModel.CreateEmployeeViewModel
+import com.example.nfc_gatway.R
+import com.example.nfc_gatway.viewmodels.MeetingViewModel.CreateMeetingViewModel
 
 @Composable
-fun CreateEmployeeScreen(
-    navController: NavController,
-    viewModel: CreateEmployeeViewModel,
-    tokenManager: TokenManager
-) {
-    val state = viewModel.createEmployeeState.value
-    val context = LocalContext.current
-    // Input fields
-    val name = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
-    val department = remember { mutableStateOf("") }
-    val project = remember { mutableStateOf("") }
-    val isAdmin = remember { mutableStateOf(false) }
-    val agreed = remember { mutableStateOf(false) }
+fun MeetingScreen(viewModel: CreateMeetingViewModel = viewModel() , navController: NavController){
+    var meetingName by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var cabinNo by remember { mutableStateOf("") }
+    var startTime by remember { mutableStateOf("") }
+    var endTime by remember { mutableStateOf("") }
+    val meetingState by viewModel.meetingState.collectAsState()
     var showSuccessDialog by remember { mutableStateOf(false) }
-    // Show dialog when employee is created successfully
-    LaunchedEffect(state.data) {
-        if (state.data == true) {
+    val context = LocalContext.current
+
+//     Show dialog when employee is created successfully
+    LaunchedEffect(meetingState) {
+        if (meetingState == "Meeting created successfully") {
             showSuccessDialog = true
         }
     }
@@ -88,19 +80,18 @@ fun CreateEmployeeScreen(
                 Text(text = "Success")
             },
             text = {
-                Text("Employee created successfully.")
+                Text("Meeting created successfully.")
             },
             confirmButton = {
                 TextButton(
                     onClick = {
                         showSuccessDialog = false
-                        // Optional: Clear input fields
-                        name.value = ""
-                        email.value = ""
-                        department.value = ""
-                        project.value = ""
-                        isAdmin.value = false
-                        agreed.value = false
+                    meetingName = ""
+                    description = ""
+                    cabinNo = ""
+                    startTime = ""
+                    endTime = ""
+
                         navController.popBackStack()
                     }
                 ) {
@@ -114,7 +105,7 @@ fun CreateEmployeeScreen(
             .fillMaxSize()
             .background(Color(0xFF014BD4))
     ) {
-val token = tokenManager.getToken(context)
+//        val token = tokenManager.getToken(context)
         Column {
             // Top Section with Curve
             Box(
@@ -129,7 +120,7 @@ val token = tokenManager.getToken(context)
                     tint = Color.White, modifier = Modifier.padding(top = 35.dp , start = 10.dp).clickable{
 //                        navController.navigate("admin/${email}/${token}") {
 //                            popUpTo("creteemployee") { inclusive = true }
-//                    }
+//                        }
                     }
                 )
                 Column(
@@ -169,7 +160,7 @@ val token = tokenManager.getToken(context)
                             verticalArrangement = Arrangement.Center
                         ) {
                             Text("Create", color = Color.White, fontWeight = FontWeight.SemiBold,fontSize = 25.sp)
-                            Text("Employee", color = Color.White,fontWeight = FontWeight.SemiBold, fontSize = 25.sp)
+                            Text("Meeting", color = Color.White,fontWeight = FontWeight.SemiBold, fontSize = 25.sp)
                             Text("Account", color = Color.White, fontWeight = FontWeight.SemiBold,fontSize = 25.sp)
                         }
                     }
@@ -202,14 +193,15 @@ val token = tokenManager.getToken(context)
 
                     Spacer(modifier = Modifier.height(17.dp))
                     Text("Entre the Details", color = Color.Black, fontSize = 25.sp)
+                    Text("Of Meeting", color = Color.Black, fontSize = 17.sp)
 
                     Spacer(modifier = Modifier.height(20.dp))
 
                     // Email Input
                     OutlinedTextField(
-                        value = name.value,
-                        onValueChange = { name.value = it },
-                        label = { Text("Employee Name", color = Color.DarkGray) },
+                        value = meetingName,
+                        onValueChange = { meetingName = it },
+                        label = { Text("Meeting Name", color = Color.DarkGray) },
                         singleLine = true,
                         leadingIcon = {
                             Icon(
@@ -225,9 +217,9 @@ val token = tokenManager.getToken(context)
                     Spacer(modifier = Modifier.height(16.dp))
 
                     OutlinedTextField(
-                        value = email.value,
-                        onValueChange = { email.value = it },
-                        label = { Text("Email", color = Color.DarkGray) },
+                        value = description,
+                        onValueChange = { description = it },
+                        label = { Text("Discription", color = Color.DarkGray) },
                         singleLine = true,
                         leadingIcon = {
                             Icon(
@@ -242,13 +234,13 @@ val token = tokenManager.getToken(context)
                     Spacer(modifier = Modifier.height(16.dp))
 
                     OutlinedTextField(
-                        value = department.value ,
-                        onValueChange = { department.value = it },
-                        label = { Text("department", color = Color.DarkGray) },
+                        value =cabinNo ,
+                        onValueChange = { cabinNo = it },
+                        label = { Text("Cabin No.", color = Color.DarkGray) },
                         singleLine = true,
                         leadingIcon = {
                             Icon(
-                                Icons.Default.Person,
+                                Icons.Default.Cabin,
                                 contentDescription = null,
                                 tint = Color.Gray
                             )
@@ -260,14 +252,30 @@ val token = tokenManager.getToken(context)
                     Spacer(modifier = Modifier.height(16.dp))
 
                     OutlinedTextField(
-                        value =project.value,
-                        onValueChange = { project.value = it  },
-                        label = { Text("Assigned Project(s)", color = Color.DarkGray) },
+                        value = startTime,
+                        onValueChange = { startTime = it },
+                        label = { Text("Meeting Start Time", color = Color.DarkGray) },
                         singleLine = true,
-                        placeholder = { Text("Separate with commas") },
                         leadingIcon = {
                             Icon(
-                                Icons.Default.Person,
+                                Icons.Default.Timer,
+                                contentDescription = null,
+                                tint = Color.Gray
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                        shape = RoundedCornerShape(10)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    OutlinedTextField(
+                        value = endTime,
+                        onValueChange = { endTime = it },
+                        label = { Text("Meeting End Time", color = Color.DarkGray) },
+                        singleLine = true,
+                        leadingIcon = {
+                            Icon(
+                                Icons.Default.Timer,
                                 contentDescription = null,
                                 tint = Color.Gray
                             )
@@ -278,69 +286,26 @@ val token = tokenManager.getToken(context)
 
                     Spacer(modifier = Modifier.height(17.dp))
 
-                    Text("Is Admin?", fontSize = 20.sp, modifier = Modifier.padding(start = 16.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-
-                        RadioButton(
-                            selected = isAdmin.value,
-                            onClick = { isAdmin.value = true }
-                        )
-                        Text("Yes")
-
-                        Spacer(modifier = Modifier.width(24.dp))
-
-                        RadioButton(
-                            selected = !isAdmin.value,
-                            onClick = { isAdmin.value = false }
-                        )
-                        Text("No")
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-
-                        Checkbox(
-                            checked = agreed.value,
-                            onCheckedChange = { agreed.value = it }
-                        )
-                        Row {
-                            Text("Agree with ")
-                            Text("TERMS & CONDITIONS",color = Color(0xFF014BD4))
-                        }
-                    }
-
                     Button(
                         onClick = {
-                            if (agreed.value) {
-                                viewModel.createEmployee(
-                                    name.value,
-                                    email.value,
-                                    department.value,
-                                    project.value,
-                                    isAdmin.value,
-                                    navController
-                                )
-                            }
+                            viewModel.createMeeting(
+                                meetingName,
+                                description,
+                                cabinNo,
+                                startTime,
+                                endTime,
+                                context
+                            )
                         },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                         colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF014BD4)
-            )
+                            containerColor = Color(0xFF014BD4)
+                        )
                     ) {
-                        Text(if (state.loading) "Creating..." else "CREATE ACCOUNT")
+                        Text(if (meetingState == "Creating") "Creating..." else "CREATE MEETING")
+//                        Text("CREATE MEETING")
                     }
                 }
             }

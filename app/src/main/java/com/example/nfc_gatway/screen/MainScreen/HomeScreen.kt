@@ -44,6 +44,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.nfc_gatway.viewmodels.ProfileViewModel.ProfileViewModel
 
 
@@ -217,11 +218,7 @@ val context = LocalContext.current
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier.clickable {
-                                        Toast.makeText(
-                                            context,
-                                            "Meeting Clicked",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        navController.navigate("employee_meeting")
                                     }
                                 ) {
                                     Box(
@@ -324,7 +321,11 @@ val context = LocalContext.current
                         ) {
                             // Logout Button
                             Button(
-                                onClick = { /* Handle logout */ },
+                                onClick = {
+                                    viewModel.logoutUser(context,
+                                        navController as NavHostController
+                                    )
+                                },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = Color(
                                         0xFF014BD4

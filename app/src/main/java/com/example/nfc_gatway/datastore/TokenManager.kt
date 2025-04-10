@@ -21,9 +21,8 @@ object TokenManager {
         return sharedPreferences.getString(TOKEN_KEY, null)
     }
 
-//    suspend fun clearToken(context: Context) {
-//        context.dataStore.edit { preferences ->
-//            preferences.remove(TOKEN_KEY)
-//        }
-//    }
+    fun clearToken(context: Context) {
+        val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        sharedPreferences.edit().remove(TOKEN_KEY).apply()
+    }
 }

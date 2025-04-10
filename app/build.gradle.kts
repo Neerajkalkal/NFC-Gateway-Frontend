@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -75,5 +77,10 @@ dependencies {
     implementation("com.auth0.android:jwtdecode:2.0.1")
     implementation ("androidx.compose.material3:material3:1.1.2")
     implementation ("androidx.compose.material:material-icons-extended:1.5.0")
+    implementation ("io.getstream:stream-chat-android-compose:6.0.0")
+    implementation (platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation ("com.android.volley:volley:1.2.1")
+    implementation ("com.google.firebase:firebase-auth-ktx")
+    implementation ("com.google.firebase:firebase-messaging-ktx")
 
 }

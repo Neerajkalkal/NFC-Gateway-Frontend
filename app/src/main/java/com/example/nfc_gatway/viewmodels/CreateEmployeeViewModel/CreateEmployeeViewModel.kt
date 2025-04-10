@@ -57,9 +57,9 @@ class CreateEmployeeViewModel(
 
                 if (response.isSuccessful) {
                     createEmployeeState.value = DataOrException(data = true)
-                    navController.navigate("admin/$email/$token") {
-                        popUpTo("create_employee") { inclusive = true }
-                    }
+//                    navController.navigate("admin") {
+//                        popUpTo("create_employee") { inclusive = true }
+//                    }
                 } else {
                     createEmployeeState.value = DataOrException(e = Exception("Failed with code: ${response.code()}"))
                 }

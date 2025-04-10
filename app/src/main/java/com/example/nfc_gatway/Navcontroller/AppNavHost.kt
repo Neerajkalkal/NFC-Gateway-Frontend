@@ -10,21 +10,32 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.nfc_gatway.Network.Retrofit.RetrofitInstance
 import com.example.nfc_gatway.Repository.EmployeeRepository
+import com.example.nfc_gatway.datastore.TokenManager
 import com.example.nfc_gatway.screen.AdminScreen.AdminScreen
 import com.example.nfc_gatway.screen.ChoiceScreen.MainScreen
+import com.example.nfc_gatway.screen.EmoloyeeMeeting.EmployeeMeetingScreen
 import com.example.nfc_gatway.screen.LoginScreen.AdminLoginScreen
 import com.example.nfc_gatway.screen.LoginScreen.EmployeeLoginScreen
 import com.example.nfc_gatway.screen.MainScreen.HomeScreen
+import com.example.nfc_gatway.screen.MeetingScreen.MeetingScreen
 import com.example.nfc_gatway.screen.NfcScreen.AttendancePopupScreen
 import com.example.nfc_gatway.screen.createEmployee.CreateEmployeeScreen
 import com.example.nfc_gatway.viewmodels.CreateEmployeeViewModel.CreateEmployeeViewModel
 import com.example.nfc_gatway.viewmodels.LoginScreenviewmodel.EmployeeLoginViewModel
+import com.example.nfc_gatway.viewmodels.MeetingViewModel.CreateMeetingViewModel
 
 @Composable
 fun AppNavHost(navController: NavHostController, viewModel: EmployeeLoginViewModel) {
     NavHost(navController = navController, startDestination = "Main") {
         composable("Main") {
-            MainScreen(navController)
+            MainScreen{
+                isAdmin ->
+                if (isAdmin){
+                    navController.navigate("adminlogin")
+                }else{
+                    navController.navigate("employeelogin")
+                }
+            }
         }
         composable("adminlogin") {
             AdminLoginScreen(
@@ -33,6 +44,16 @@ fun AppNavHost(navController: NavHostController, viewModel: EmployeeLoginViewMod
         }
         composable("employeelogin") {
             EmployeeLoginScreen(
+                navController = navController
+            )
+        }
+        composable("createmeeting") {
+            MeetingScreen(
+            navController = navController
+            )
+        }
+        composable("employee_meeting") {
+            EmployeeMeetingScreen(
                 navController = navController
             )
         }
@@ -46,7 +67,8 @@ fun AppNavHost(navController: NavHostController, viewModel: EmployeeLoginViewMod
             }
             CreateEmployeeScreen(
                 navController = navController,
-                viewModel = viewModel
+                viewModel = viewModel,
+                tokenManager = TokenManager
             )
 
         }

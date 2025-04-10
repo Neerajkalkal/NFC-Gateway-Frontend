@@ -2,6 +2,7 @@ package com.example.nfc_gatway.screen.AdminScreen
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +46,11 @@ import com.example.nfc_gatway.viewmodels.HomeviewModel.HomeViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.nfc_gatway.viewmodels.ProfileViewModel.ProfileViewModel
 import java.net.URLEncoder
 
@@ -53,7 +59,25 @@ import java.net.URLEncoder
 fun AdminScreen(viewModel: HomeViewModel = viewModel(), email: String, token: String ,navController: NavController) {
     val employee by viewModel.employee
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     // Fetch employee data when screen loads
+
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                Log.d("AdminScreen", "ON_RESUME called, refetching employee data...")
+                viewModel.fetchEmployee(email, token)
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
     LaunchedEffect(email) {
         viewModel.fetchEmployee(email,token)
     }
@@ -194,11 +218,7 @@ fun AdminScreen(viewModel: HomeViewModel = viewModel(), email: String, token: St
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier.clickable {
-                                        Toast.makeText(
-                                            context,
-                                            "Meeting Clicked",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        navController.navigate("createmeeting")
                                     }
                                 ) {
                                     Box(
@@ -299,7 +319,9 @@ fun AdminScreen(viewModel: HomeViewModel = viewModel(), email: String, token: St
                         ) {
                             // Logout Button
                             Button(
-                                onClick = { /* Handle logout */ },
+                                onClick = { viewModel.logoutUser(context,
+                                    navController as NavHostController
+                                ) },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = Color(
                                         0xFF014BD4

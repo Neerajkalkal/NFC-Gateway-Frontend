@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.auth0.android.jwt.JWT
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 class AttendanceViewModel : ViewModel() {
 
@@ -41,16 +43,23 @@ class AttendanceViewModel : ViewModel() {
                 val today = getTodayDate()
                 val currentTime = getCurrentTime()
 
+                Log.d("Attendance", "Checking document: $docId")
+
                 attendanceCollection.document(docId).get()
                     .addOnSuccessListener { document ->
                         if (document.exists()) {
-                            val attendanceLogs = document.get("attendanceLogs") as? Map<String, Map<String, String>>
-                            val todayLog = attendanceLogs?.get(today)
+                            Log.d("Attendance", "Document exists")
+
+                            val attendanceLogs = document.get("attendanceLogs") as? Map<*, *>
+                            val todayLog = attendanceLogs?.get(today) as? Map<*, *>
+                            val entry = todayLog?.get("entry") as? String
+                            val exit = todayLog?.get("exit") as? String
 
                             when {
                                 todayLog == null -> {
+                                    val updateData = mapOf("attendanceLogs.$today.entry" to currentTime)
                                     attendanceCollection.document(docId)
-                                        .update("attendanceLogs.$today.entry", currentTime)
+                                        .set(updateData, SetOptions.merge())
                                         .addOnSuccessListener {
                                             Log.d("Attendance", "Entry marked at $currentTime")
                                             function()
@@ -60,9 +69,10 @@ class AttendanceViewModel : ViewModel() {
                                         }
                                 }
 
-                                todayLog["entry"] != null && todayLog["exit"] == null -> {
+                                entry != null && exit == null -> {
+                                    val updateData = mapOf("attendanceLogs.$today.exit" to currentTime)
                                     attendanceCollection.document(docId)
-                                        .update("attendanceLogs.$today.exit", currentTime)
+                                        .set(updateData, SetOptions.merge())
                                         .addOnSuccessListener {
                                             Log.d("Attendance", "Exit marked at $currentTime")
                                             function()
@@ -74,10 +84,12 @@ class AttendanceViewModel : ViewModel() {
 
                                 else -> {
                                     Log.d("Attendance", "Attendance already marked twice today.")
-                                    function() // Optional: You can still show success screen if needed
+                                    function()
                                 }
                             }
                         } else {
+                            Log.d("Attendance", "Document doesn't exist. Creating new.")
+
                             val newAttendance = hashMapOf(
                                 "employeeId" to employeeId,
                                 "nfcId" to nfcId,
@@ -109,6 +121,6 @@ class AttendanceViewModel : ViewModel() {
             }
         }
     }
-
 }
+
 
