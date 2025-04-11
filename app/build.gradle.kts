@@ -82,5 +82,7 @@ dependencies {
     implementation ("com.android.volley:volley:1.2.1")
     implementation ("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.firebase:firebase-messaging-ktx")
+    implementation ("com.google.android.gms:play-services-base:18.4.0")
+    implementation ("com.google.android.gms:play-services-tasks:18.0.2")
 
 }

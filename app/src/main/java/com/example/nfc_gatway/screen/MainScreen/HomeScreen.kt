@@ -2,6 +2,7 @@ package com.example.nfc_gatway.screen.MainScreen
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -244,11 +245,8 @@ val context = LocalContext.current
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier.clickable {
-                                        Toast.makeText(
-                                            context,
-                                            "Holiday-Apply Clicked",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        Log.d("NavDebug", "Holiday-Apply clicked")
+                                       navController.navigate("holidayRequest")
                                     }
                                 ) {
                                     Box(
@@ -377,7 +375,9 @@ val context = LocalContext.current
                                     tint = Color.Black,
                                     modifier = Modifier
                                         .size(33.dp)
-                                        .clickable {}
+                                        .clickable {
+                                            navController.navigate("notifications/employee")
+                                        }
                                 )
                             }
                         }

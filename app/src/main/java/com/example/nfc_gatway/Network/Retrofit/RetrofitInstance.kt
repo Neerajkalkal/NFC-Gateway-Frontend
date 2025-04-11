@@ -24,7 +24,7 @@ object RetrofitInstance {
                 .create()
 
         Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8081/")
+            .baseUrl("http://172.20.10.2:8081/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

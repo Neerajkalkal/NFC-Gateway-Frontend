@@ -6,6 +6,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.example.nfc_gatway.R
@@ -32,35 +33,31 @@ fun AttendancePopupScreen(
     token: String,
     nfcId: String,
     viewModel: AttendanceViewModel = viewModel(),
-    onDismiss: () -> Unit = {},
     navController: NavHostController
 ) {
     var showSuccess by remember { mutableStateOf(false) }
 
+
     // Automatically call markAttendance when visible and not already successful
-    if (isVisible && !showSuccess) {
-        LaunchedEffect(Unit) {
-            viewModel.markAttendance(token , nfcId) {
-                showSuccess = true
-            }
-        }
-    }
 
     // Redirect to HomeScreen when attendance is successful
-    LaunchedEffect(showSuccess) {
-        if (showSuccess) {
-            navController.navigate("admin/{email}/{token}") {
-                popUpTo("attendancePopup") { inclusive = true } // Optional: clean back stack
-            }
-        }
-    }
+
 
     // Attendance scanning UI
     if (isVisible && !showSuccess) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White),
+
+                .background(Color.White)
+                .clickable(onClick = {
+                    viewModel.markAttendance(
+                        token = token,
+                        nfcId = nfcId,
+                        function = {
+                        }
+                    )
+                }),
             contentAlignment = Alignment.Center
         ) {
             Card(
@@ -87,7 +84,9 @@ fun AttendancePopupScreen(
                             Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
                         ) {
-                            IconButton(onClick = { onDismiss() }) {
+                            IconButton(onClick = {
+                                navController.popBackStack()
+                            }) {
                                 Icon(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = "Close",

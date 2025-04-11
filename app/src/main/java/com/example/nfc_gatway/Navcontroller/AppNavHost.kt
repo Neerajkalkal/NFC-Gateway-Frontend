@@ -11,14 +11,17 @@ import androidx.navigation.navArgument
 import com.example.nfc_gatway.Network.Retrofit.RetrofitInstance
 import com.example.nfc_gatway.Repository.EmployeeRepository
 import com.example.nfc_gatway.datastore.TokenManager
+import com.example.nfc_gatway.screen.AdminNotificationScreen.AdminNotificationScreen
 import com.example.nfc_gatway.screen.AdminScreen.AdminScreen
 import com.example.nfc_gatway.screen.ChoiceScreen.MainScreen
 import com.example.nfc_gatway.screen.EmoloyeeMeeting.EmployeeMeetingScreen
+import com.example.nfc_gatway.screen.HolidayRequestScreen.HolidayRequestScreen
 import com.example.nfc_gatway.screen.LoginScreen.AdminLoginScreen
 import com.example.nfc_gatway.screen.LoginScreen.EmployeeLoginScreen
 import com.example.nfc_gatway.screen.MainScreen.HomeScreen
 import com.example.nfc_gatway.screen.MeetingScreen.MeetingScreen
 import com.example.nfc_gatway.screen.NfcScreen.AttendancePopupScreen
+import com.example.nfc_gatway.screen.NotificationScreen.NotificationScreen
 import com.example.nfc_gatway.screen.createEmployee.CreateEmployeeScreen
 import com.example.nfc_gatway.viewmodels.CreateEmployeeViewModel.CreateEmployeeViewModel
 import com.example.nfc_gatway.viewmodels.LoginScreenviewmodel.EmployeeLoginViewModel
@@ -57,6 +60,12 @@ fun AppNavHost(navController: NavHostController, viewModel: EmployeeLoginViewMod
                 navController = navController
             )
         }
+        composable("notifications/{userType}") { backStackEntry ->
+            val userType = backStackEntry.arguments?.getString("userType") ?: "employee"
+            NotificationScreen(userType = userType,
+                navController = navController)
+        }
+
         composable("creteemployee") {
             val context = LocalContext.current
             val viewModel = remember {
@@ -72,6 +81,14 @@ fun AppNavHost(navController: NavHostController, viewModel: EmployeeLoginViewMod
             )
 
         }
+        composable("holidayRequest") {
+            HolidayRequestScreen(navController = navController)
+        }
+        composable("adminNotifications") {
+            AdminNotificationScreen(
+                navController = navController
+            )
+        }
         composable(
             "nfc_popup/{token}/{nfcId}",
             arguments = listOf(
@@ -86,9 +103,6 @@ fun AppNavHost(navController: NavHostController, viewModel: EmployeeLoginViewMod
                 isVisible = true,
                 token = token,
                 nfcId = nfcId,
-                onDismiss = {
-                    navController.popBackStack()
-                },
                 navController = navController
             )
         }

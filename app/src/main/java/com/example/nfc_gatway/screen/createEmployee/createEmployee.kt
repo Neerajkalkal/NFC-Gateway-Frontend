@@ -127,9 +127,7 @@ val token = tokenManager.getToken(context)
                     Icons.Default.ArrowBack,
                     contentDescription = null,
                     tint = Color.White, modifier = Modifier.padding(top = 35.dp , start = 10.dp).clickable{
-//                        navController.navigate("admin/${email}/${token}") {
-//                            popUpTo("creteemployee") { inclusive = true }
-//                    }
+                        navController.popBackStack()
                     }
                 )
                 Column(

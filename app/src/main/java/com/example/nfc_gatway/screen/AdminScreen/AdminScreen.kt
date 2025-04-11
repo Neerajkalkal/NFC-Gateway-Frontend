@@ -373,7 +373,9 @@ fun AdminScreen(viewModel: HomeViewModel = viewModel(), email: String, token: St
                                     tint = Color.Black,
                                     modifier = Modifier
                                         .size(33.dp)
-                                        .clickable {}
+                                        .clickable {
+                                            navController.navigate("adminNotifications")
+                                        }
                                 )
                             }
                         }

@@ -31,11 +31,11 @@ class AttendanceViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val jwt = JWT(token)
-                val employeeId = jwt.getClaim("employeeId").asString()
+                val employeeId = jwt.getClaim("email").asString()
                 val name = jwt.getClaim("name").asString()
 
                 if (employeeId.isNullOrEmpty() || name.isNullOrEmpty()) {
-                    Log.e("Attendance", "Invalid token. Missing employeeId or name.")
+                    Log.e("Attendance", "Invalid token. Missing employeeId or name. $employeeId")
                     return@launch
                 }
 

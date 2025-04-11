@@ -45,7 +45,25 @@ class CreateMeetingViewModel : ViewModel() {
             .set(meetingData)
             .addOnSuccessListener {
                 _meetingState.value = "Meeting created successfully"
+                val notificationData = hashMapOf(
+                    "title" to "New Meeting: $meetingName",
+                    "message" to description,
+                    "timestamp" to Timestamp.now(),
+                    "userType" to "employee"
+                )
+
+                db.collection("notifications")
+                    .add(notificationData)
+                    .addOnSuccessListener {
+                        Log.d("Firestore", "Notification stored")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("Firestore", "Error storing notification: ${e.message}", e)
+                    }
+
                 sendNotificationToEmployees(context, meetingName, description)
+
+
             }
             .addOnFailureListener {
                 _meetingState.value = "Error creating meeting: ${it.message}"
