@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import kotlin.getValue
 
 object RetrofitInstance {
@@ -15,6 +16,9 @@ object RetrofitInstance {
         }
 
         val client = OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS) // ⏱ Increase connection timeout
+            .readTimeout(60, TimeUnit.SECONDS)    // ⏱ Increase read timeout
+            .writeTimeout(60, TimeUnit.SECONDS)   // ⏱ Increase write timeout
             .addInterceptor(logging)
             .build()
 
@@ -24,7 +28,7 @@ object RetrofitInstance {
                 .create()
 
         Retrofit.Builder()
-            .baseUrl("http://172.20.10.2:8081/")
+            .baseUrl("http://52.66.19.77:8081/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

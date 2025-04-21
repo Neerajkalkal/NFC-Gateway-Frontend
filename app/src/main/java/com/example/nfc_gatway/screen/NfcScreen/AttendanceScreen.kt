@@ -20,13 +20,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.nfc_gatway.datastore.TokenManager
 import com.example.nfc_gatway.viewmodels.AttendanceViewModel.AttendanceViewModel
+import kotlinx.coroutines.delay
+
 @Composable
 fun AttendancePopupScreen(
     isVisible: Boolean = true,
@@ -36,28 +40,36 @@ fun AttendancePopupScreen(
     navController: NavHostController
 ) {
     var showSuccess by remember { mutableStateOf(false) }
+    var hasScanned by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+
+    // ✅ Auto-trigger markAttendance on first visibility
+    LaunchedEffect(isVisible, hasScanned) {
+        if (isVisible && !hasScanned) {
+            hasScanned = true
+            val token = TokenManager.getToken(context)
+            if (!token.isNullOrEmpty()) {
+                viewModel.markAttendance(token, nfcId)
+            }
+        }
+    }
 
 
-    // Automatically call markAttendance when visible and not already successful
+    // ✅ Redirect after success
+    LaunchedEffect(showSuccess) {
+        if (showSuccess) {
+            delay(1500)
+            navController.popBackStack()
+        }
+    }
 
-    // Redirect to HomeScreen when attendance is successful
-
-
-    // Attendance scanning UI
+    // ✅ UI remains the same
     if (isVisible && !showSuccess) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-
-                .background(Color.White)
-                .clickable(onClick = {
-                    viewModel.markAttendance(
-                        token = token,
-                        nfcId = nfcId,
-                        function = {
-                        }
-                    )
-                }),
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
             Card(
